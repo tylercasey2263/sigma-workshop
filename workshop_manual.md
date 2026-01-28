@@ -143,7 +143,7 @@ status: experimental
 description: Detects the use of Acunetix web vulnerability scanner based on User-Agent string
 references:
     - https://github.com/splunk/botsv1
-author: Your Name
+author: Tyler Casey
 date: 2024/01/28
 tags:
     - attack.reconnaissance
@@ -210,7 +210,7 @@ status: experimental
 description: Detects failed login attempts to Joomla administrator interface indicating brute force attack
 references:
     - https://github.com/splunk/botsv1
-author: Your Name
+author: Tyler Casey
 date: 2024/01/28
 tags:
     - attack.credential_access
@@ -280,7 +280,7 @@ status: experimental
 description: Detects upload of executable files via HTTP POST with multipart/form-data
 references:
     - https://github.com/splunk/botsv1
-author: Your Name
+author: Tyler Casey
 date: 2024/01/28
 tags:
     - attack.initial_access
@@ -368,7 +368,7 @@ status: experimental
 description: Detects execution of suspicious processes from web server directories indicating webshell activity
 references:
     - https://github.com/splunk/botsv1
-author: Your Name
+author: Tyler Casey
 date: 2024/01/28
 tags:
     - attack.execution
@@ -449,7 +449,7 @@ status: experimental
 description: Detects upload of image files that may be used for website defacement
 references:
     - https://github.com/splunk/botsv1
-author: Your Name
+author: Tyler Casey
 date: 2024/01/28
 tags:
     - attack.impact
@@ -534,7 +534,7 @@ status: experimental
 description: Detects DNS queries or HTTP requests to dynamic DNS providers often used by attackers
 references:
     - https://github.com/splunk/botsv1
-author: Your Name
+author: Tyler Casey
 date: 2024/01/28
 tags:
     - attack.command_and_control
@@ -609,7 +609,7 @@ status: experimental
 description: Detects network connections to known Po1s0n1vy APT infrastructure
 references:
     - https://github.com/splunk/botsv1
-author: Your Name
+author: Tyler Casey
 date: 2024/01/28
 tags:
     - attack.command_and_control
@@ -683,7 +683,7 @@ status: experimental
 description: Detects HTTP POST-based brute force attacks indicating failed login attempts
 references:
     - https://github.com/splunk/botsv1
-author: Your Name
+author: Tyler Casey
 date: 2024/01/28
 tags:
     - attack.credential_access
@@ -759,7 +759,7 @@ status: experimental
 description: Detects Microsoft Office applications spawning suspicious child processes indicating macro execution
 references:
     - https://github.com/splunk/botsv1
-author: Your Name
+author: Tyler Casey
 date: 2024/01/28
 tags:
     - attack.execution
@@ -837,7 +837,7 @@ status: experimental
 description: Detects execution of VBScript files from temporary directories
 references:
     - https://github.com/splunk/botsv1
-author: Your Name
+author: Tyler Casey
 date: 2024/01/28
 tags:
     - attack.execution
@@ -914,7 +914,7 @@ status: experimental
 description: Detects VBScript with characteristics of Cerber ransomware dropper
 references:
     - https://github.com/splunk/botsv1
-author: Your Name
+author: Tyler Casey
 date: 2024/01/28
 tags:
     - attack.execution
@@ -990,7 +990,7 @@ status: experimental
 description: Detects download of suspicious files that may be ransomware payloads
 references:
     - https://github.com/splunk/botsv1
-author: Your Name
+author: Tyler Casey
 date: 2024/01/28
 tags:
     - attack.command_and_control
@@ -1067,7 +1067,7 @@ status: experimental
 description: Detects DNS queries to domains associated with Cerber ransomware C2
 references:
     - https://github.com/splunk/botsv1
-author: Your Name
+author: Tyler Casey
 date: 2024/01/28
 tags:
     - attack.command_and_control
@@ -1142,7 +1142,7 @@ status: experimental
 description: Detects mass file modification activity consistent with ransomware encryption
 references:
     - https://github.com/splunk/botsv1
-author: Your Name
+author: Tyler Casey
 date: 2024/01/28
 tags:
     - attack.impact
@@ -1226,7 +1226,7 @@ status: experimental
 description: Detects execution of .tmp files which is unusual and seen with Cerber ransomware
 references:
     - https://github.com/splunk/botsv1
-author: Your Name
+author: Tyler Casey
 date: 2024/01/28
 tags:
     - attack.execution
@@ -1301,7 +1301,7 @@ status: experimental
 description: Detects USB device insertion followed by suspicious process execution
 references:
     - https://github.com/splunk/botsv1
-author: Your Name
+author: Tyler Casey
 date: 2024/01/28
 tags:
     - attack.initial_access
@@ -1390,7 +1390,7 @@ status: experimental
 description: Detects opening of Office documents with macro-enabled extensions
 references:
     - https://github.com/splunk/botsv1
-author: Your Name
+author: Tyler Casey
 date: 2024/01/28
 tags:
     - attack.execution
@@ -1470,7 +1470,7 @@ status: experimental
 description: Detects suspicious ICMP traffic patterns associated with Cerber ransomware beaconing
 references:
     - https://github.com/splunk/botsv1
-author: Your Name
+author: Tyler Casey
 date: 2024/01/28
 tags:
     - attack.command_and_control
@@ -1542,7 +1542,7 @@ status: experimental
 description: Detects mass file modifications on file servers which may indicate ransomware spread
 references:
     - https://github.com/splunk/botsv1
-author: Your Name
+author: Tyler Casey
 date: 2024/01/28
 tags:
     - attack.lateral_movement
@@ -1634,7 +1634,7 @@ status: experimental
 description: Detects creation of files commonly used as ransom notes
 references:
     - https://github.com/splunk/botsv1
-author: Your Name
+author: Tyler Casey
 date: 2024/01/28
 tags:
     - attack.impact
@@ -1720,7 +1720,7 @@ status: experimental
 description: Correlates multiple events to detect the full Po1s0n1vy attack chain
 references:
     - https://github.com/splunk/botsv1
-author: Your Name
+author: Tyler Casey
 date: 2024/01/28
 tags:
     - attack.initial_access
@@ -1780,7 +1780,7 @@ status: experimental
 description: Correlates multiple events to detect the full Cerber ransomware attack chain
 references:
     - https://github.com/splunk/botsv1
-author: Your Name
+author: Tyler Casey
 date: 2024/01/28
 tags:
     - attack.initial_access

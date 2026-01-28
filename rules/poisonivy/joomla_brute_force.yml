@@ -4,7 +4,7 @@ status: experimental
 description: Detects failed login attempts to Joomla administrator interface indicating brute force attack
 references:
     - https://github.com/splunk/botsv1
-author: BOTSV1 Workshop
+author: Tyler Casey
 date: 2024/01/28
 tags:
     - attack.credential_access

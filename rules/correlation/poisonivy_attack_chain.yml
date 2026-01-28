@@ -4,7 +4,7 @@ status: experimental
 description: Correlates multiple events to detect the full Po1s0n1vy attack chain
 references:
     - https://github.com/splunk/botsv1
-author: BOTSV1 Workshop
+author: Tyler Casey
 date: 2024/01/28
 tags:
     - attack.initial_access

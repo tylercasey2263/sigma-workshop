@@ -4,7 +4,7 @@ status: experimental
 description: Detects upload of executable files via HTTP POST with multipart/form-data
 references:
     - https://github.com/splunk/botsv1
-author: BOTSV1 Workshop
+author: Tyler Casey
 date: 2024/01/28
 tags:
     - attack.initial_access

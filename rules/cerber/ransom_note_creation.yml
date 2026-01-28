@@ -4,7 +4,7 @@ status: experimental
 description: Detects creation of files commonly used as ransom notes
 references:
     - https://github.com/splunk/botsv1
-author: BOTSV1 Workshop
+author: Tyler Casey
 date: 2024/01/28
 tags:
     - attack.impact

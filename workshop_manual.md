@@ -476,7 +476,7 @@ detection:
             - '.png'
             - '.gif'
     filter:
-        http_referrer|contains: 'legitimate-domain.com'  # Adjust to your environment
+        http_referrer|contains: 'legitimate-domain.com'
     condition: selection and selection_file and not filter
 falsepositives:
     - Legitimate content management
@@ -619,7 +619,7 @@ logsource:
 detection:
     selection:
         dest_ip:
-            - '23.22.63.114'  # Known Po1s0n1vy staging server
+            - '23.22.63.114'
         dest|contains:
             - 'po1s0n1vy.com'
     condition: selection
@@ -1003,7 +1003,7 @@ detection:
         http_method: 'GET'
         uri_query|endswith:
             - '.tmp'
-            - '.jpg'  # Cerber used .jpg for payload delivery
+            - '.jpg'
             - '.jpeg'
         status: 200
     suspicious_domain:
@@ -1152,7 +1152,7 @@ logsource:
     product: windows
 detection:
     selection:
-        EventCode: 2  # Sysmon File Creation Time Changed
+        EventCode: 2
         TargetFilename|contains: '\Users\'
         TargetFilename|endswith:
             - '.txt'
@@ -1311,12 +1311,12 @@ logsource:
     product: windows
 detection:
     usb_insertion:
-        EventCode: 7045  # Service installation (USB driver)
+        EventCode: 7045
         Service_Name|contains:
             - 'USB'
             - 'USBSTOR'
     suspicious_process:
-        EventCode: 1  # Process creation
+        EventCode: 1
         Image|endswith: '\WINWORD.EXE'
     timeframe: 5m
     condition: usb_insertion followed by suspicious_process
@@ -1402,10 +1402,10 @@ detection:
     selection:
         Image|endswith: '\WINWORD.EXE'
         CommandLine|contains:
-            - '.dotm'  # Word macro-enabled template
-            - '.docm'  # Word macro-enabled document
-            - '.xlsm'  # Excel macro-enabled
-            - '.pptm'  # PowerPoint macro-enabled
+            - '.dotm'
+            - '.docm'
+            - '.xlsm'
+            - '.pptm'
     condition: selection
 falsepositives:
     - Legitimate macro-enabled documents in business environments
@@ -1555,12 +1555,12 @@ logsource:
 detection:
     selection:
         EventCode:
-            - 5145  # Network share object accessed
-            - 4663  # Attempt to access object
+            - 5145
+            - 4663
         Share_Name|contains: '\\'
         Access_Mask:
-            - '0x2'  # Write
-            - '0x4'  # Delete
+            - '0x2'
+            - '0x4'
     condition: selection
 falsepositives:
     - Legitimate file operations
@@ -1644,7 +1644,7 @@ logsource:
     product: windows
 detection:
     selection:
-        EventCode: 11  # File created
+        EventCode: 11
         TargetFilename|contains:
             - 'README'
             - 'DECRYPT'

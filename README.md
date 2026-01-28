@@ -19,6 +19,8 @@ sigma-botsv1/
 ├── README.md                      # This file
 ├── workshop_manual.md             # Complete workshop guide
 ├── slides/                        # Presentation materials
+├── scripts/
+│   └── sync_rules.py              # Syncs rules to workshop manual
 └── rules/
     ├── poisonivy/                 # APT attack detection rules
     │   ├── acunetix_scanner.yml
@@ -114,6 +116,28 @@ By completing this workshop, you will:
 | Lateral Movement | T1021.002 |
 | Command & Control | T1071, T1095, T1105 |
 | Impact | T1486, T1491.001 |
+
+## Maintaining Rules
+
+The `rules/` directory is the **source of truth** for all Sigma rules. The workshop manual contains copies of these rules for easy reading.
+
+### Automatic Sync
+
+A pre-commit hook automatically syncs rule changes to `workshop_manual.md` before each commit. When you edit a rule in `/rules`, the manual updates automatically on your next commit.
+
+### Manual Sync
+
+To manually sync rules to the workshop manual:
+
+```bash
+python scripts/sync_rules.py
+```
+
+### Adding New Rules
+
+1. Create the `.yml` file in the appropriate `/rules` subdirectory
+2. Add the corresponding section in `workshop_manual.md` with a YAML code block containing the rule
+3. The sync script matches rules by their `id:` field
 
 ## Resources
 

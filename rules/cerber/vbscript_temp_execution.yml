@@ -1,0 +1,31 @@
+title: VBScript Execution from Temporary Directory
+id: 7b8c9d0e-1f2a-3b4c-5d6e-7f8a9b0c1d2e
+status: experimental
+description: Detects execution of VBScript files from temporary directories
+references:
+    - https://github.com/splunk/botsv1
+author: BOTSV1 Workshop
+date: 2024/01/28
+tags:
+    - attack.execution
+    - attack.t1059.005
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection:
+        Image|endswith:
+            - '\wscript.exe'
+            - '\cscript.exe'
+        CommandLine|contains:
+            - '\AppData\Local\Temp\'
+            - '\AppData\Roaming\'
+            - '\Users\Public\'
+        CommandLine|endswith:
+            - '.vbs'
+            - '.vbe'
+    condition: selection
+falsepositives:
+    - Legitimate scripts run from temporary locations
+    - Software installers
+level: high

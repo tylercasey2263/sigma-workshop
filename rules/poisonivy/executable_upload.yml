@@ -1,0 +1,40 @@
+title: Executable File Upload via HTTP POST Multipart Form
+id: 9a8b7c6d-5e4f-3a2b-1c0d-8e7f6a5b4c3d
+status: experimental
+description: Detects upload of executable files via HTTP POST with multipart/form-data
+references:
+    - https://github.com/splunk/botsv1
+author: BOTSV1 Workshop
+date: 2024/01/28
+tags:
+    - attack.initial_access
+    - attack.t1190
+    - attack.persistence
+    - attack.t1505.003
+logsource:
+    category: proxy
+    product: web
+detection:
+    selection:
+        http_method: 'POST'
+        http_content_type|contains: 'multipart/form-data'
+    selection_uri:
+        - uri_query|contains:
+            - '.exe'
+            - '.dll'
+            - '.bat'
+            - '.cmd'
+            - '.ps1'
+            - '.vbs'
+        - form_data|contains:
+            - '.exe'
+            - '.dll'
+            - '.bat'
+            - '.cmd'
+            - '.ps1'
+            - '.vbs'
+    condition: selection and selection_uri
+falsepositives:
+    - Legitimate software updates
+    - File sharing applications
+level: high

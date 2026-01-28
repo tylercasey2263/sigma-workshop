@@ -1,0 +1,28 @@
+title: HTTP POST Brute Force Attack Pattern
+id: 5f6a7b8c-9d0e-1f2a-3b4c-5d6e7f8a9b0c
+status: experimental
+description: Detects HTTP POST-based brute force attacks indicating failed login attempts
+references:
+    - https://github.com/splunk/botsv1
+author: BOTSV1 Workshop
+date: 2024/01/28
+tags:
+    - attack.credential_access
+    - attack.t1110.001
+logsource:
+    category: proxy
+    product: web
+detection:
+    selection:
+        http_method: 'POST'
+        uri_query|contains:
+            - 'username='
+            - 'passwd='
+            - 'password='
+        status:
+            - 401
+            - 403
+    condition: selection
+falsepositives:
+    - Users repeatedly mistyping passwords
+level: high

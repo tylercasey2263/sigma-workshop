@@ -1,0 +1,24 @@
+title: Cerber Ransomware DNS Query Pattern
+id: 0e1f2a3b-4c5d-6e7f-8a9b-0c1d2e3f4a5b
+status: experimental
+description: Detects DNS queries to domains associated with Cerber ransomware C2
+references:
+    - https://github.com/splunk/botsv1
+author: BOTSV1 Workshop
+date: 2024/01/28
+tags:
+    - attack.command_and_control
+    - attack.t1071.004
+logsource:
+    category: dns
+detection:
+    selection:
+        query|contains:
+            - 'cerber'
+        query|endswith:
+            - '.win'
+            - '.top'
+    condition: selection
+falsepositives:
+    - Unlikely
+level: critical

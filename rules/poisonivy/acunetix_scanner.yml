@@ -1,0 +1,23 @@
+title: Acunetix Web Vulnerability Scanner User-Agent
+id: 4c5f5d3e-2b1a-4f9c-9e8d-7a6b5c4d3e2f
+status: experimental
+description: Detects the use of Acunetix web vulnerability scanner based on User-Agent string
+references:
+    - https://github.com/splunk/botsv1
+author: BOTSV1 Workshop
+date: 2024/01/28
+tags:
+    - attack.reconnaissance
+    - attack.t1595.002
+logsource:
+    category: proxy
+    product: web
+detection:
+    selection:
+        http_user_agent|contains:
+            - 'Acunetix'
+            - 'acunetix'
+    condition: selection
+falsepositives:
+    - Legitimate vulnerability scanning by authorized security teams
+level: high

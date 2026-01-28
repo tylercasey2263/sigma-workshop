@@ -21,13 +21,13 @@ By the end of this workshop, you will be able to:
 - **Username:** `student1`
 - **Password:** `student1`
 - **Index:** `botsv1`
-- **Time Range:** August 10-24, 2016
+- **Time Range:** August 09-11, 2016
 
 ### Important Notes
 - All data is from the BOTSV1 dataset (August 2016)
 - You have read-only access to the environment
 - Queries may take time to complete - be patient!
-- Use the time picker to narrow searches if needed
+- Use the time picker to narrow searches
 
 ---
 

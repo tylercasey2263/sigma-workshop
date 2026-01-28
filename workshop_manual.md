@@ -100,8 +100,8 @@ Before diving into the hunt, familiarize yourself with the main data sources ava
 ### For Each Detection Rule:
 1. **Read the Detection Description** - Understand what you're hunting for and why
 2. **Review the Query Optimization Notes** - Know which data sources to search
-3. **Study the Sigma Rule** - Analyze the detection logic
-4. **Write Your Query** - Try creating your own Splunk search before looking at examples
+3. **Write your Sigma Rule** - Attempt to write a Sigma rule to identify the activity, use the example sigma rule as a guide
+4. **Convert and deploy your query** - Convert your rule to Splunk
 5. **Execute and Analyze** - Run the query and examine the results
 6. **Review the Findings** - Understand what was detected and its significance in the attack chain
 
@@ -166,7 +166,7 @@ level: high
 ### Example Splunk Query
 ```spl
 index=botsv1 sourcetype=stream:http 
-| search http_user_agent="*Acunetix*"
+http_user_agent="*Acunetix*"
 | table _time src_ip dest_ip uri_path http_user_agent
 | sort _time
 ```
@@ -234,7 +234,7 @@ level: high
 ### Example Splunk Query
 ```spl
 index=botsv1 sourcetype=stream:http 
-| search uri_path="*/joomla/administrator/index.php*" http_method=POST uri_query="*passwd=*"
+ uri_path="*/joomla/administrator/index.php*" http_method=POST uri_query="*passwd=*"
 | stats count by src_ip
 | where count > 10
 | sort -count
@@ -320,8 +320,8 @@ level: high
 ### Example Splunk Query
 ```spl
 index=botsv1 sourcetype=stream:http 
-| search http_method=POST http_content_type="*multipart/form-data*" 
-| search uri_query="*.exe*" OR form_data="*.exe*"
+ http_method=POST http_content_type="*multipart/form-data*" 
+ uri_query="*.exe*" OR form_data="*.exe*"
 | table _time src_ip dest_ip uri_path form_data
 | sort _time
 ```
@@ -404,8 +404,8 @@ level: critical
 ### Example Splunk Query
 ```spl
 index=botsv1 sourcetype="XmlWinEventLog:Microsoft-Windows-Sysmon/Operational" EventCode=1
-| search Image="*\\inetpub\\wwwroot\\*" OR Image="*\\xampp\\htdocs\\*"
-| search CommandLine="*whoami*" OR CommandLine="*ipconfig*" OR CommandLine="*systeminfo*"
+ Image="*\\inetpub\\wwwroot\\*" OR Image="*\\xampp\\htdocs\\*"
+ CommandLine="*whoami*" OR CommandLine="*ipconfig*" OR CommandLine="*systeminfo*"
 | table _time ComputerName User Image CommandLine ParentImage
 | sort _time
 ```
@@ -488,8 +488,8 @@ level: medium
 ### Example Splunk Query
 ```spl
 index=botsv1 sourcetype=stream:http 
-| search http_method=POST uri_path="*/joomla/*"
-| search form_data="*.jpg" OR form_data="*.jpeg" OR form_data="*.png"
+ http_method=POST uri_path="*/joomla/*"
+ form_data="*.jpg" OR form_data="*.jpeg" OR form_data="*.png"
 | table _time src_ip dest_ip uri_path form_data
 | sort _time
 ```
@@ -560,7 +560,7 @@ level: medium
 ### Example Splunk Query
 ```spl
 index=botsv1 sourcetype=stream:dns
-| search query="*.jumpingcrab.com" OR query="*.no-ip.com" OR query="*.duckdns.org"
+ query="*.jumpingcrab.com" OR query="*.no-ip.com" OR query="*.duckdns.org"
 | table _time src_ip query answer
 | sort _time
 ```
@@ -632,7 +632,7 @@ level: critical
 ### Example Splunk Query
 ```spl
 index=botsv1 (sourcetype=stream:ip OR sourcetype=fgt_utm OR sourcetype=stream:http)
-| search dest_ip="23.22.63.114" OR dest="*po1s0n1vy.com*"
+ dest_ip="23.22.63.114" OR dest="*po1s0n1vy.com*"
 | stats count by src_ip, dest_ip, dest
 | sort -count
 ```
@@ -711,8 +711,8 @@ level: high
 ### Example Splunk Query
 ```spl
 index=botsv1 sourcetype=stream:http 
-| search http_method=POST (status=401 OR status=403)
-| search uri_query="*username=*" OR uri_query="*passwd=*" OR uri_query="*password=*"
+ http_method=POST (status=401 OR status=403)
+ uri_query="*username=*" OR uri_query="*passwd=*" OR uri_query="*password=*"
 | stats count by src_ip, dest_ip, uri_path
 | where count > 20
 | sort -count
@@ -791,7 +791,7 @@ level: high
 ### Example Splunk Query
 ```spl
 index=botsv1 sourcetype="XmlWinEventLog:Microsoft-Windows-Sysmon/Operational" EventCode=1
-| search ParentImage="*WINWORD.EXE*" (Image="*wscript.exe*" OR Image="*cscript.exe*" OR Image="*cmd.exe*" OR Image="*powershell.exe*")
+ ParentImage="*WINWORD.EXE*" (Image="*wscript.exe*" OR Image="*cscript.exe*" OR Image="*cmd.exe*" OR Image="*powershell.exe*")
 | table _time ComputerName User ParentImage Image CommandLine
 | sort _time
 ```
@@ -868,8 +868,8 @@ level: high
 ### Example Splunk Query
 ```spl
 index=botsv1 sourcetype="XmlWinEventLog:Microsoft-Windows-Sysmon/Operational" EventCode=1
-| search (Image="*wscript.exe*" OR Image="*cscript.exe*")
-| search CommandLine="*AppData\\Local\\Temp*" CommandLine="*.vbs"
+ (Image="*wscript.exe*" OR Image="*cscript.exe*")
+ CommandLine="*AppData\\Local\\Temp*" CommandLine="*.vbs"
 | table _time ComputerName User Image CommandLine ParentImage
 | sort _time
 ```
@@ -941,7 +941,7 @@ level: critical
 ### Example Splunk Query
 ```spl
 index=botsv1 sourcetype="XmlWinEventLog:Microsoft-Windows-Sysmon/Operational" EventCode=1
-| search ParentImage="*WINWORD.EXE*" CommandLine="*.vbs*" CommandLine="*AppData*"
+ ParentImage="*WINWORD.EXE*" CommandLine="*.vbs*" CommandLine="*AppData*"
 | table _time ComputerName User ParentImage Image CommandLine
 | sort _time
 ```
@@ -1019,9 +1019,9 @@ level: high
 ### Example Splunk Query
 ```spl
 index=botsv1 sourcetype=stream:http 
-| search http_method=GET status=200
-| search (uri_query="*.tmp" OR uri_query="*.jpg")
-| search dest="*solidaritedeproximite.org*"
+ http_method=GET status=200
+ (uri_query="*.tmp" OR uri_query="*.jpg")
+ dest="*solidaritedeproximite.org*"
 | table _time src_ip dest uri_query bytes_in
 | sort _time
 ```
@@ -1091,7 +1091,7 @@ level: critical
 ### Example Splunk Query
 ```spl
 index=botsv1 sourcetype=stream:dns
-| search query="*cerber*" (query="*.win" OR query="*.top")
+ query="*cerber*" (query="*.win" OR query="*.top")
 | table _time src_ip query answer query_type
 | sort _time
 ```
@@ -1173,7 +1173,7 @@ level: high
 ### Example Splunk Query
 ```spl
 index=botsv1 sourcetype="XmlWinEventLog:Microsoft-Windows-Sysmon/Operational" EventCode=2
-| search TargetFilename="*\\Users\\*" (TargetFilename="*.txt" OR TargetFilename="*.pdf" OR TargetFilename="*.doc*" OR TargetFilename="*.xls*")
+ TargetFilename="*\\Users\\*" (TargetFilename="*.txt" OR TargetFilename="*.pdf" OR TargetFilename="*.doc*" OR TargetFilename="*.xls*")
 | bin _time span=1m
 | stats count by _time, ComputerName, User
 | where count > 20
@@ -1250,7 +1250,7 @@ level: high
 ### Example Splunk Query
 ```spl
 index=botsv1 sourcetype="XmlWinEventLog:Microsoft-Windows-Sysmon/Operational" EventCode=1
-| search Image="*.tmp" (ParentImage="*wscript.exe*" OR ParentImage="*cscript.exe*")
+ Image="*.tmp" (ParentImage="*wscript.exe*" OR ParentImage="*cscript.exe*")
 | table _time ComputerName User ParentImage Image CommandLine
 | sort _time
 ```
@@ -1329,7 +1329,7 @@ level: medium
 ### Example Splunk Query
 ```spl
 index=botsv1 sourcetype="WinEventLog:System" EventCode=7045
-| search Service_Name="*USB*" OR Service_Name="*USBSTOR*"
+ Service_Name="*USB*" OR Service_Name="*USBSTOR*"
 | eval usb_time=_time
 | table usb_time ComputerName Service_Name
 | join ComputerName 
@@ -1416,7 +1416,7 @@ level: medium
 ### Example Splunk Query
 ```spl
 index=botsv1 sourcetype="XmlWinEventLog:Microsoft-Windows-Sysmon/Operational" EventCode=1
-| search Image="*WINWORD.EXE*" (CommandLine="*.dotm" OR CommandLine="*.docm")
+ Image="*WINWORD.EXE*" (CommandLine="*.dotm" OR CommandLine="*.docm")
 | table _time ComputerName User Image CommandLine
 | sort _time
 ```
@@ -1492,7 +1492,7 @@ level: medium
 ### Example Splunk Query
 ```spl
 index=botsv1 sourcetype=fgt_utm protocol=1
-| search srcip="192.168.250.100"
+ srcip="192.168.250.100"
 | stats count by srcip, dstip
 | where count > 50
 | sort -count
@@ -1573,7 +1573,7 @@ level: high
 ### Example Splunk Query
 ```spl
 index=botsv1 host="we9041srv" sourcetype="WinEventLog:Security" (EventCode=5145 OR EventCode=4663)
-| search Access_Mask="0x2" OR Access_Mask="0x4"
+ Access_Mask="0x2" OR Access_Mask="0x4"
 | stats count by Source_Network_Address, Share_Name
 | where count > 100
 | sort -count
@@ -1667,8 +1667,8 @@ level: high
 ### Example Splunk Query
 ```spl
 index=botsv1 sourcetype="XmlWinEventLog:Microsoft-Windows-Sysmon/Operational" EventCode=11
-| search (TargetFilename="*README*" OR TargetFilename="*DECRYPT*" OR TargetFilename="*HELP*")
-| search (TargetFilename="*.txt" OR TargetFilename="*.html" OR TargetFilename="*.htm")
+ (TargetFilename="*README*" OR TargetFilename="*DECRYPT*" OR TargetFilename="*HELP*")
+ (TargetFilename="*.txt" OR TargetFilename="*.html" OR TargetFilename="*.htm")
 | table _time ComputerName User TargetFilename Image
 | sort _time
 ```

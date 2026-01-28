@@ -223,7 +223,7 @@ detection:
     selection:
         uri_path|contains: '/joomla/administrator/index.php'
         http_method: 'POST'
-        uri_query|contains: 'passwd='
+        form_data|contains: 'passwd='
     condition: selection
 falsepositives:
     - Users with forgotten passwords
@@ -234,7 +234,7 @@ level: high
 ### Example Splunk Query
 ```spl
 index=botsv1 sourcetype=stream:http 
- uri_path="*/joomla/administrator/index.php*" http_method=POST uri_query="*passwd=*"
+ uri_path="*/joomla/administrator/index.php*" http_method=POST form_data="*passwd=*"
 | stats count by src_ip
 | where count > 10
 | sort -count

@@ -1,0 +1,31 @@
+title: Mass File Modification on File Server via SMB
+id: 6e7f8a9b-0c1d-2e3f-4a5b-6c7d8e9f0a1b
+status: experimental
+description: Detects mass file modifications on file servers which may indicate ransomware spread
+references:
+    - https://github.com/splunk/botsv1
+author: BOTSV1 Workshop
+date: 2024/01/28
+tags:
+    - attack.lateral_movement
+    - attack.t1021.002
+    - attack.impact
+    - attack.t1486
+logsource:
+    category: file_share
+    product: windows
+detection:
+    selection:
+        EventCode:
+            - 5145
+            - 4663
+        Share_Name|contains: '\\'
+        Access_Mask:
+            - '0x2'
+            - '0x4'
+    condition: selection
+falsepositives:
+    - Legitimate file operations
+    - Backup operations
+    - File synchronization
+level: high

@@ -1,0 +1,32 @@
+title: Microsoft Office Spawning Suspicious Child Process
+id: 6a7b8c9d-0e1f-2a3b-4c5d-6e7f8a9b0c1d
+status: experimental
+description: Detects Microsoft Office applications spawning suspicious child processes indicating macro execution
+references:
+    - https://github.com/splunk/botsv1
+author: BOTSV1 Workshop
+date: 2024/01/28
+tags:
+    - attack.execution
+    - attack.t1204.002
+    - attack.defense_evasion
+    - attack.t1027.010
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection:
+        ParentImage|endswith:
+            - '\WINWORD.EXE'
+            - '\EXCEL.EXE'
+            - '\POWERPNT.EXE'
+        Image|endswith:
+            - '\wscript.exe'
+            - '\cscript.exe'
+            - '\cmd.exe'
+            - '\powershell.exe'
+            - '\mshta.exe'
+    condition: selection
+falsepositives:
+    - Legitimate macros used in business processes
+level: high

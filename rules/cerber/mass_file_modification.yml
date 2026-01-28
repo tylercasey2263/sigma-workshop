@@ -1,0 +1,31 @@
+title: Suspicious Mass File Modification Activity
+id: 1f2a3b4c-5d6e-7f8a-9b0c-1d2e3f4a5b6c
+status: experimental
+description: Detects mass file modification activity consistent with ransomware encryption
+references:
+    - https://github.com/splunk/botsv1
+author: BOTSV1 Workshop
+date: 2024/01/28
+tags:
+    - attack.impact
+    - attack.t1486
+logsource:
+    category: file_event
+    product: windows
+detection:
+    selection:
+        EventCode: 2
+        TargetFilename|contains: '\Users\'
+        TargetFilename|endswith:
+            - '.txt'
+            - '.pdf'
+            - '.doc'
+            - '.docx'
+            - '.xls'
+            - '.xlsx'
+    condition: selection
+falsepositives:
+    - Legitimate bulk file operations
+    - Backup software
+    - Synchronization tools
+level: high

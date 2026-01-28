@@ -1,0 +1,23 @@
+title: Network Connection to Po1s0n1vy C2 Infrastructure
+id: 4e5f6a7b-8c9d-0e1f-2a3b-4c5d6e7f8a9b
+status: experimental
+description: Detects network connections to known Po1s0n1vy APT infrastructure
+references:
+    - https://github.com/splunk/botsv1
+author: BOTSV1 Workshop
+date: 2024/01/28
+tags:
+    - attack.command_and_control
+    - attack.t1071
+logsource:
+    category: firewall
+detection:
+    selection:
+        dest_ip:
+            - '23.22.63.114'
+        dest|contains:
+            - 'po1s0n1vy.com'
+    condition: selection
+falsepositives:
+    - None expected
+level: critical

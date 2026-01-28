@@ -1,0 +1,26 @@
+title: Access to Suspicious Dynamic DNS Provider
+id: 3d4e5f6a-7b8c-9d0e-1f2a-3b4c5d6e7f8a
+status: experimental
+description: Detects DNS queries or HTTP requests to dynamic DNS providers often used by attackers
+references:
+    - https://github.com/splunk/botsv1
+author: BOTSV1 Workshop
+date: 2024/01/28
+tags:
+    - attack.command_and_control
+    - attack.t1071.001
+logsource:
+    category: dns
+detection:
+    selection:
+        query|endswith:
+            - '.jumpingcrab.com'
+            - '.no-ip.com'
+            - '.duckdns.org'
+            - '.ddns.net'
+            - '.dynu.com'
+    condition: selection
+falsepositives:
+    - Legitimate use of dynamic DNS services
+    - IoT devices using DDNS
+level: medium

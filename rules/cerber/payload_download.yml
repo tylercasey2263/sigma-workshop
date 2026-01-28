@@ -1,0 +1,29 @@
+title: Suspicious File Download from Compromised or Malicious Domain
+id: 9d0e1f2a-3b4c-5d6e-7f8a-9b0c1d2e3f4a
+status: experimental
+description: Detects download of suspicious files that may be ransomware payloads
+references:
+    - https://github.com/splunk/botsv1
+author: BOTSV1 Workshop
+date: 2024/01/28
+tags:
+    - attack.command_and_control
+    - attack.t1105
+logsource:
+    category: proxy
+    product: web
+detection:
+    selection:
+        http_method: 'GET'
+        uri_query|endswith:
+            - '.tmp'
+            - '.jpg'
+            - '.jpeg'
+        status: 200
+    suspicious_domain:
+        dest|contains:
+            - 'solidaritedeproximite.org'
+    condition: selection and suspicious_domain
+falsepositives:
+    - Legitimate file downloads
+level: high

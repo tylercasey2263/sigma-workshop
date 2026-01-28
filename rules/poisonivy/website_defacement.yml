@@ -1,0 +1,39 @@
+title: Suspicious Image File Upload to Web Directory
+id: 2c3d4e5f-6a7b-8c9d-0e1f-2a3b4c5d6e7f
+status: experimental
+description: Detects upload of image files that may be used for website defacement
+references:
+    - https://github.com/splunk/botsv1
+author: BOTSV1 Workshop
+date: 2024/01/28
+tags:
+    - attack.impact
+    - attack.t1491.001
+logsource:
+    category: proxy
+    product: web
+detection:
+    selection:
+        http_method: 'POST'
+        uri_path|contains:
+            - '/joomla/'
+            - '/administrator/'
+            - '/uploads/'
+    selection_file:
+        - uri_query|contains:
+            - '.jpg'
+            - '.jpeg'
+            - '.png'
+            - '.gif'
+        - form_data|contains:
+            - '.jpg'
+            - '.jpeg'
+            - '.png'
+            - '.gif'
+    filter:
+        http_referrer|contains: 'legitimate-domain.com'
+    condition: selection and selection_file and not filter
+falsepositives:
+    - Legitimate content management
+    - User profile picture uploads
+level: medium

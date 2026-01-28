@@ -326,10 +326,10 @@ level: high
 
 ### Example Splunk Query
 ```spl
-index=botsv1 sourcetype=stream:http 
- http_method=POST http_content_type="*multipart/form-data*" 
- uri_query="*.exe*" OR form_data="*.exe*"
-| table _time src_ip dest_ip uri_path form_data
+index=botsv1 sourcetype=stream:http
+    http_method=POST http_content_type="*multipart/form-data*"
+    (uri_query="*.exe*" OR form_data="*.exe*" OR dest_content="*.exe*")
+| table _time src_ip dest_ip uri_path form_data dest_content
 | sort _time
 ```
 
@@ -419,8 +419,10 @@ level: critical
 ### Example Splunk Query
 ```spl
 index=botsv1 sourcetype="XmlWinEventLog:Microsoft-Windows-Sysmon/Operational" EventCode=1
- Image="*\\inetpub\\wwwroot\\*" OR Image="*\\xampp\\htdocs\\*"
- CommandLine="*whoami*" OR CommandLine="*ipconfig*" OR CommandLine="*systeminfo*"
+    (Image="*\\inetpub\\wwwroot\\*.exe" OR Image="*\\xampp\\htdocs\\*.exe"
+     OR ParentImage="*\\inetpub\\wwwroot\\*.exe" OR ParentImage="*\\xampp\\htdocs\\*.exe")
+    (CommandLine="*whoami*" OR CommandLine="*ipconfig*" OR CommandLine="*systeminfo*"
+     OR CommandLine="*net user*" OR CommandLine="*cmd.exe*" OR CommandLine="*powershell*")
 | table _time ComputerName User Image CommandLine ParentImage
 | sort _time
 ```
@@ -496,10 +498,10 @@ level: medium
 
 ### Example Splunk Query
 ```spl
-index=botsv1 sourcetype=stream:http 
- http_method=POST uri_path="*/joomla/*"
- form_data="*.jpg" OR form_data="*.jpeg" OR form_data="*.png"
-| table _time src_ip dest_ip uri_path form_data
+index=botsv1 sourcetype=stream:http
+    http_method=GET
+    (uri_path="*.jpg*" OR uri_path="*.jpeg*" OR uri_path="*.png*" OR uri_path="*.gif*")
+| table _time src_ip dest_ip uri_path
 | sort _time
 ```
 
@@ -720,9 +722,9 @@ level: high
 
 ### Example Splunk Query
 ```spl
-index=botsv1 sourcetype=stream:http 
- http_method=POST (status=401 OR status=403)
- uri_query="*username=*" OR uri_query="*passwd=*" OR uri_query="*password=*"
+index=botsv1 sourcetype=stream:http
+    http_method=POST NOT status=2*
+    (form_data="*username=*" OR form_data="*passwd=*" OR form_data="*password=*")
 | stats count by src_ip, dest_ip, uri_path
 | where count > 20
 | sort -count

@@ -82,18 +82,30 @@ rules/
 └── correlation/    # Attack chain rules (2)
 scripts/
 └── sync_rules.py   # Syncs rules to workshop manual
+hooks/
+└── pre-commit      # Auto-syncs rules on commit
 workshop_manual.md  # Complete workshop guide
 ```
 
+## Setup
+
+After cloning, enable the pre-commit hook:
+
+```bash
+git config core.hooksPath hooks
+```
+
+This ensures the workshop manual stays in sync with rule changes.
+
 ## Maintaining Rules
 
-The `rules/` directory is the source of truth. To sync changes to the workshop manual:
+The `rules/` directory is the source of truth. To manually sync changes:
 
 ```bash
 python scripts/sync_rules.py
 ```
 
-A pre-commit hook runs this automatically.
+The pre-commit hook runs this automatically on each commit.
 
 ## Resources
 

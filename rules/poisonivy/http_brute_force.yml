@@ -4,7 +4,7 @@ status: experimental
 description: Detects HTTP POST-based brute force attacks indicating failed login attempts
 references:
     - https://github.com/splunk/botsv1
-author: BOTSV1 Workshop
+author: Tyler Casey
 date: 2024/01/28
 tags:
     - attack.credential_access

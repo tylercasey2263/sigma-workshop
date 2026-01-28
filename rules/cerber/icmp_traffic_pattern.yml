@@ -4,7 +4,7 @@ status: experimental
 description: Detects suspicious ICMP traffic patterns associated with Cerber ransomware beaconing
 references:
     - https://github.com/splunk/botsv1
-author: BOTSV1 Workshop
+author: Tyler Casey
 date: 2024/01/28
 tags:
     - attack.command_and_control

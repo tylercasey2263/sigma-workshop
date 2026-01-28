@@ -4,7 +4,7 @@ status: experimental
 description: Detects the use of Acunetix web vulnerability scanner based on User-Agent string
 references:
     - https://github.com/splunk/botsv1
-author: BOTSV1 Workshop
+author: Tyler Casey
 date: 2024/01/28
 tags:
     - attack.reconnaissance

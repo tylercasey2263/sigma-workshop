@@ -33,6 +33,13 @@ detection:
             - '.cmd'
             - '.ps1'
             - '.vbs'
+        - dest_content|contains:
+            - '.exe'
+            - '.dll'
+            - '.bat'
+            - '.cmd'
+            - '.ps1'
+            - '.vbs'
     condition: selection and selection_uri
 falsepositives:
     - Legitimate software updates

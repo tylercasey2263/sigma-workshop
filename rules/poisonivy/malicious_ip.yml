@@ -12,12 +12,13 @@ tags:
 logsource:
     category: firewall
 detection:
-    selection:
+    selection_ip:
         dest_ip:
             - '23.22.63.114'
+    selection_domain:
         dest|contains:
             - 'po1s0n1vy.com'
-    condition: selection
+    condition: selection_ip or selection_domain
 falsepositives:
     - None expected
 level: critical

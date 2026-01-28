@@ -1,7 +1,7 @@
 title: Suspicious Process Execution from Web Server Working Directory
 id: 1b2c3d4e-5f6a-7b8c-9d0e-1f2a3b4c5d6e
 status: experimental
-description: Detects execution of suspicious processes from web server directories indicating webshell activity
+description: Detects execution of suspicious processes from web server directories or spawned by processes in web server directories indicating webshell activity
 references:
     - https://github.com/splunk/botsv1
 author: Tyler Casey
@@ -15,13 +15,21 @@ logsource:
     category: process_creation
     product: windows
 detection:
-    selection:
+    selection_image:
         Image|contains:
             - '\inetpub\wwwroot\'
             - '\xampp\htdocs\'
             - '\wamp\www\'
         Image|endswith:
             - '.exe'
+    selection_parent_image:
+        ParentImage|contains:
+            - '\inetpub\wwwroot\'
+            - '\xampp\htdocs\'
+            - '\wamp\www\'
+        ParentImage|endswith:
+            - '.exe'
+    selection_commands:
         CommandLine|contains:
             - 'whoami'
             - 'net user'
@@ -30,7 +38,7 @@ detection:
             - 'systeminfo'
             - 'cmd.exe'
             - 'powershell'
-    condition: selection
+    condition: (selection_image or selection_parent_image) and selection_commands
 falsepositives:
     - Legitimate web applications with executable components
 level: critical

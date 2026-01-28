@@ -14,13 +14,9 @@ logsource:
     product: web
 detection:
     selection:
-        http_method: 'POST'
-        uri_path|contains:
-            - '/joomla/'
-            - '/administrator/'
-            - '/uploads/'
+        http_method: 'GET'
     selection_file:
-        - uri_query|contains:
+        - uri_path|contains:
             - '.jpg'
             - '.jpeg'
             - '.png'
@@ -30,9 +26,7 @@ detection:
             - '.jpeg'
             - '.png'
             - '.gif'
-    filter:
-        http_referrer|contains: 'legitimate-domain.com'
-    condition: selection and selection_file and not filter
+    condition: selection and selection_file
 falsepositives:
     - Legitimate content management
     - User profile picture uploads

@@ -15,14 +15,14 @@ logsource:
 detection:
     selection:
         http_method: 'POST'
-        uri_query|contains:
+        form_data|contains:
             - 'username='
             - 'passwd='
             - 'password='
-        status:
-            - 401
-            - 403
-    condition: selection
+    selection_status:
+        status|startswith:
+            - '20'
+    condition: selection and not selection_status
 falsepositives:
     - Users repeatedly mistyping passwords
 level: high

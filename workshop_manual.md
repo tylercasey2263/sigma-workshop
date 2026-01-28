@@ -241,7 +241,7 @@ index=botsv1 sourcetype=stream:http
 ```
 
 ### What This Detection Finds
-This query reveals **thousands of login attempts** from IP address **23.22.63.114** to the Joomla administrator login page. The high volume of attempts confirms this is an automated brute force attack.
+This query reveals **hundreds of login attempts** from IP address **23.22.63.114** to the Joomla administrator login page. The high volume of attempts confirms this is an automated brute force attack.
 
 **Key Findings:**
 - **Attacker IP:** 23.22.63.114 (different from scanner IP - likely the C2/exploitation server)
@@ -310,6 +310,13 @@ detection:
             - '.cmd'
             - '.ps1'
             - '.vbs'
+        - dest_content|contains:
+            - '.exe'
+            - '.dll'
+            - '.bat'
+            - '.cmd'
+            - '.ps1'
+            - '.vbs'
     condition: selection and selection_uri
 falsepositives:
     - Legitimate software updates
@@ -366,7 +373,7 @@ Look for process creation events (Sysmon EventCode=1) where executables are runn
 title: Suspicious Process Execution from Web Server Working Directory
 id: 1b2c3d4e-5f6a-7b8c-9d0e-1f2a3b4c5d6e
 status: experimental
-description: Detects execution of suspicious processes from web server directories indicating webshell activity
+description: Detects execution of suspicious processes from web server directories or spawned by processes in web server directories indicating webshell activity
 references:
     - https://github.com/splunk/botsv1
 author: Tyler Casey
@@ -380,13 +387,21 @@ logsource:
     category: process_creation
     product: windows
 detection:
-    selection:
+    selection_image:
         Image|contains:
             - '\inetpub\wwwroot\'
             - '\xampp\htdocs\'
             - '\wamp\www\'
         Image|endswith:
             - '.exe'
+    selection_parent_image:
+        ParentImage|contains:
+            - '\inetpub\wwwroot\'
+            - '\xampp\htdocs\'
+            - '\wamp\www\'
+        ParentImage|endswith:
+            - '.exe'
+    selection_commands:
         CommandLine|contains:
             - 'whoami'
             - 'net user'
@@ -395,7 +410,7 @@ detection:
             - 'systeminfo'
             - 'cmd.exe'
             - 'powershell'
-    condition: selection
+    condition: (selection_image or selection_parent_image) and selection_commands
 falsepositives:
     - Legitimate web applications with executable components
 level: critical
@@ -460,13 +475,9 @@ logsource:
     product: web
 detection:
     selection:
-        http_method: 'POST'
-        uri_path|contains:
-            - '/joomla/'
-            - '/administrator/'
-            - '/uploads/'
+        http_method: 'GET'
     selection_file:
-        - uri_query|contains:
+        - uri_path|contains:
             - '.jpg'
             - '.jpeg'
             - '.png'
@@ -476,9 +487,7 @@ detection:
             - '.jpeg'
             - '.png'
             - '.gif'
-    filter:
-        http_referrer|contains: 'legitimate-domain.com'
-    condition: selection and selection_file and not filter
+    condition: selection and selection_file
 falsepositives:
     - Legitimate content management
     - User profile picture uploads
@@ -618,12 +627,13 @@ tags:
 logsource:
     category: firewall
 detection:
-    selection:
+    selection_ip:
         dest_ip:
             - '23.22.63.114'
+    selection_domain:
         dest|contains:
             - 'po1s0n1vy.com'
-    condition: selection
+    condition: selection_ip or selection_domain
 falsepositives:
     - None expected
 level: critical
@@ -695,14 +705,14 @@ logsource:
 detection:
     selection:
         http_method: 'POST'
-        uri_query|contains:
+        form_data|contains:
             - 'username='
             - 'passwd='
             - 'password='
-        status:
-            - 401
-            - 403
-    condition: selection
+    selection_status:
+        status|startswith:
+            - '20'
+    condition: selection and not selection_status
 falsepositives:
     - Users repeatedly mistyping passwords
 level: high

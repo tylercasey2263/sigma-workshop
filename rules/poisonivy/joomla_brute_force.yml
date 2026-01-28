@@ -16,7 +16,7 @@ detection:
     selection:
         uri_path|contains: '/joomla/administrator/index.php'
         http_method: 'POST'
-        uri_query|contains: 'passwd='
+        form_data|contains: 'passwd='
     condition: selection
 falsepositives:
     - Users with forgotten passwords

@@ -147,7 +147,7 @@ level: high
 ### Example Splunk Query
 ```spl
 index=botsv1 sourcetype=stream:http 
-http_user_agent="*Acunetix*"
+http_user_agent IN ("*Acunetix*", "*acunetix*")
 | table _time src_ip dest_ip uri_path http_user_agent
 | sort _time
 ```
@@ -215,7 +215,7 @@ level: high
 ### Example Splunk Query
 ```spl
 index=botsv1 sourcetype=stream:http 
- uri_path="*/joomla/administrator/index.php*" http_method=POST form_data="*passwd=*"
+uri_path="*/joomla/administrator/index.php*" http_method="POST" form_data="*passwd=*"
 | stats count by src_ip
 | where count > 10
 | sort -count
@@ -308,8 +308,7 @@ level: high
 ### Example Splunk Query
 ```spl
 index=botsv1 sourcetype=stream:http
-    http_method=POST http_content_type="*multipart/form-data*"
-    (uri_query="*.exe*" OR form_data="*.exe*" OR dest_content="*.exe*")
+http_method="POST" http_content_type="*multipart/form-data*" uri_query IN ("*.exe*", "*.dll*", "*.bat*", "*.cmd*", "*.ps1*", "*.vbs*") OR form_data IN ("*.exe*", "*.dll*", "*.bat*", "*.cmd*", "*.ps1*", "*.vbs*") OR dest_content IN ("*.exe*", "*.dll*", "*.bat*", "*.cmd*", "*.ps1*", "*.vbs*")
 | table _time src_ip dest_ip uri_path form_data dest_content
 | sort _time
 ```
@@ -400,10 +399,7 @@ level: critical
 ### Example Splunk Query
 ```spl
 index=botsv1 sourcetype="XmlWinEventLog:Microsoft-Windows-Sysmon/Operational" EventCode=1
-    (Image="*\\inetpub\\wwwroot\\*.exe" OR Image="*\\xampp\\htdocs\\*.exe"
-     OR ParentImage="*\\inetpub\\wwwroot\\*.exe" OR ParentImage="*\\xampp\\htdocs\\*.exe")
-    (CommandLine="*whoami*" OR CommandLine="*ipconfig*" OR CommandLine="*systeminfo*"
-     OR CommandLine="*net user*" OR CommandLine="*cmd.exe*" OR CommandLine="*powershell*")
+(Image IN ("*\\inetpub\\wwwroot\\*", "*\\xampp\\htdocs\\*", "*\\wamp\\www\\*") Image="*.exe") OR (ParentImage IN ("*\\inetpub\\wwwroot\\*", "*\\xampp\\htdocs\\*", "*\\wamp\\www\\*") ParentImage="*.exe") CommandLine IN ("*whoami*", "*net user*", "*net localgroup*", "*ipconfig*", "*systeminfo*", "*cmd.exe*", "*powershell*")
 | table _time ComputerName User Image CommandLine ParentImage
 | sort _time
 ```
@@ -480,8 +476,7 @@ level: medium
 ### Example Splunk Query
 ```spl
 index=botsv1 sourcetype=stream:http
-    http_method=GET
-    (uri_path="*.jpg*" OR uri_path="*.jpeg*" OR uri_path="*.png*" OR uri_path="*.gif*")
+http_method="GET" uri_path IN ("*.jpg*", "*.jpeg*", "*.png*", "*.gif*") OR form_data IN ("*.jpg*", "*.jpeg*", "*.png*", "*.gif*")
 | table _time src_ip dest_ip uri_path
 | sort _time
 ```
@@ -552,8 +547,8 @@ level: medium
 ### Example Splunk Query
 ```spl
 index=botsv1 sourcetype=stream:dns
- query="*.jumpingcrab.com" OR query="*.no-ip.com" OR query="*.duckdns.org"
-| table _time src_ip query answer
+query IN ("*.jumpingcrab.com", "*.no-ip.com", "*.duckdns.org", "*.ddns.net", "*.dynu.com")
+| table _time src_ip query 
 | sort _time
 ```
 
@@ -704,8 +699,7 @@ level: high
 ### Example Splunk Query
 ```spl
 index=botsv1 sourcetype=stream:http
-    http_method=POST NOT status=2*
-    (form_data="*username=*" OR form_data="*passwd=*" OR form_data="*password=*")
+http_method="POST" form_data IN ("*username=*", "*passwd=*", "*password=*") NOT status="20*"
 | stats count by src_ip, dest_ip, uri_path
 | where count > 20
 | sort -count

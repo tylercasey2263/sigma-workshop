@@ -7,11 +7,13 @@ A hands-on workshop for learning threat hunting and Sigma rule development using
 1. Access the Splunk lab: https://splunk.samsclass.info/en-US/app/search/search
 2. Login with `student1` / `student1`
 3. Set time range to **August 10-24, 2016** and index to `botsv1`
-4. Follow the [Workshop Manual](workshop_manual.md)
+4. **Part 1:** Complete the [Sigma Rule Writing Practice](sigma_prac_app.md) exercises
+5. **Part 2:** Follow the [Workshop Manual](workshop_manual.md) for guided threat hunting
 
 ## What You'll Learn
 
 - Sigma rule syntax and structure
+- Writing detection logic with selection conditions and field modifiers
 - Converting Sigma rules to Splunk queries
 - Hunting for malicious activity using structured detection logic
 - Tracing complete attack chains from initial access to impact
@@ -19,7 +21,21 @@ A hands-on workshop for learning threat hunting and Sigma rule development using
 
 ## Workshop Content
 
-**22 Sigma detection rules** across two attack scenarios:
+### Part 1: Sigma Rule Writing Practice
+
+Start here to build foundational skills. The [Sigma Rule Writing Practice](sigma_prac_app.md) provides **5 skeleton Sigma rules** where you complete the detection logic:
+
+| Exercise | Detection Target | MITRE ATT&CK |
+|----------|------------------|--------------|
+| 1 | Whoami Command Execution | T1033 |
+| 2 | Net User Enumeration | T1087.001 |
+| 3 | Encoded PowerShell Execution | T1059.001 |
+| 4 | Certutil Download Abuse | T1105 |
+| 5 | Scheduled Task Persistence | T1053.005 |
+
+### Part 2: Threat Hunting with BOTSV1
+
+After completing the practice exercises, move to the [Workshop Manual](workshop_manual.md) which contains **22 Sigma detection rules** across two attack scenarios:
 
 | Scenario | Rules | Description |
 |----------|-------|-------------|
@@ -84,7 +100,8 @@ scripts/
 └── sync_rules.py   # Syncs rules to workshop manual
 hooks/
 └── pre-commit      # Auto-syncs rules on commit
-workshop_manual.md  # Complete workshop guide
+sigma_prac_app.md   # Part 1: Sigma rule writing exercises
+workshop_manual.md  # Part 2: Guided threat hunting walkthrough
 ```
 
 ## Setup

@@ -19,7 +19,7 @@ For each scenario:
 2. **Review the hints** - Use the provided guidance on what fields and values to look for
 3. **Complete the logsource** - Fill in the appropriate `category` and `product`
 4. **Write the detection logic** - Create `selection` criteria and `condition` statement
-5. **Test your rule** - Convert to Splunk and validate against the BOTSV1 dataset
+5. **Test your rule** - Convert to Splunk
 
 ### Sigma Detection Syntax Reference
 

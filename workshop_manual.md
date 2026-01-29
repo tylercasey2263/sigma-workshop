@@ -137,7 +137,6 @@ detection:
     selection:
         http_user_agent|contains:
             - 'Acunetix'
-            - 'acunetix'
     condition: selection
 falsepositives:
     - Legitimate vulnerability scanning by authorized security teams

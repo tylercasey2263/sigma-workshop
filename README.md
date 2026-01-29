@@ -1,4 +1,4 @@
-# BOTSV1 Sigma Threat Hunting Workshop
+# Sigma Threat Hunting Workshop
 
 A hands-on workshop for learning threat hunting and Sigma rule development using Splunk's Boss of the SOC (BOTS) Version 1 dataset.
 
@@ -33,7 +33,7 @@ Start here to build foundational skills. The [Sigma Rule Writing Practice](sigma
 | 4 | Certutil Download Abuse | T1105 |
 | 5 | Scheduled Task Persistence | T1053.005 |
 
-### Part 2: Threat Hunting with BOTSV1
+### Part 2: Threat Hunting Walkthrough
 
 After completing the practice exercises, move to the [Workshop Manual](workshop_manual.md) which contains **22 Sigma detection rules** across two attack scenarios:
 

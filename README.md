@@ -40,7 +40,7 @@ After completing the practice exercises, move to the [Workshop Manual](workshop_
 | Scenario | Rules | Description |
 |----------|-------|-------------|
 | Po1s0n1vy APT | 8 | Web exploitation, webshell deployment, site defacement |
-| Cerber Ransomware | 12 | Macro malware, lateral movement, file encryption |
+| Cerber Ransomware (WIP) | 12 | Macro malware, lateral movement, file encryption |
 | Correlation | 2 | Full attack chain detection |
 
 ## Attack Scenarios
@@ -60,7 +60,7 @@ An APT group targets Wayne Enterprises' Joomla web server (`imreallynotbatman.co
 
 **Target:** 192.168.250.70
 
-### Scenario 2: Cerber Ransomware
+### Scenario 2: Cerber Ransomware (WIP)
 
 An employee opens a weaponized Word document from a USB drive:
 

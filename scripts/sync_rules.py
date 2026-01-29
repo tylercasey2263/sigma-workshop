@@ -98,7 +98,7 @@ def main():
     repo_root = script_dir.parent
 
     rules_dir = repo_root / 'rules'
-    manual_path = repo_root / 'workshop_manual.md'
+    manual_path = repo_root / 'labs' / 'workshop_manual.md'
 
     if not rules_dir.exists():
         print(f"Error: Rules directory not found: {rules_dir}", file=sys.stderr)

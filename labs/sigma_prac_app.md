@@ -23,6 +23,8 @@ For each scenario:
 
 ### Sigma Detection Syntax Reference
 
+Reference: https://github.com/SigmaHQ/sigma-specification/tree/main 
+
 **Common Logsource Categories:**
 - `process_creation` - Process execution events (Sysmon EventCode=1)
 - `dns` - DNS query events

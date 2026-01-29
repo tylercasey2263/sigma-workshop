@@ -1,8 +1,8 @@
-# BOTSV1 Sigma Threat Hunting Workshop Manual
+# Sigma Threat Hunting Workshop Manual
 
 ## Workshop Overview
 
-Welcome to the BOTSV1 Sigma Threat Hunting Workshop! In this hands-on exercise, you'll use Sigma rules to detect and investigate a real-world APT attack scenario captured in Splunk's Boss of the SOC (BOTS) Version 1 dataset.
+Welcome to the Sigma Threat Hunting Workshop! In this hands-on exercise, you'll use Sigma rules to detect and investigate a real-world APT attack scenario captured in Splunk's Boss of the SOC (BOTS) Version 1 dataset.
 
 ### Learning Objectives
 By the end of this workshop, you will be able to:
@@ -26,7 +26,7 @@ By the end of this workshop, you will be able to:
 ### Important Notes
 - All data is from the BOTSV1 dataset (August 2016)
 - You have read-only access to the environment
-- Queries may take time to complete - be patient!
+- Queries may take time to complete, it is a large dataset!
 - Use the time picker to narrow searches
 
 ---
@@ -725,68 +725,6 @@ This detection serves as a **complementary indicator** to Detection 2, providing
 
 ---
 
-## Correlation Detections
-
-### Detection 21: Po1s0n1vy Full Attack Chain
-
-**What Are We Looking For?**
-Rather than detecting individual tactics, this correlation rule identifies when multiple indicators from the Po1s0n1vy attack chain occur on the same system within a 24-hour window. Seeing the progression from scanning to brute force to file upload to execution confirms a full compromise.
-
-**Why This Matters:**
-- Provides high-confidence attribution to Po1s0n1vy APT
-- Confirms full attack progression
-- Triggers comprehensive incident response
-
-**Splunk Query Optimization:**
-- **Index:** `index=botsv1`
-- **Sourcetype:** Multiple - `stream:http`, `XmlWinEventLog:Microsoft-Windows-Sysmon/Operational`, `fgt_utm`
-
-### Sigma Rule
-```yaml
-title: Po1s0n1vy APT Attack Chain Correlation
-id: 8a9b0c1d-2e3f-4a5b-6c7d-8e9f0a1b2c3d
-status: experimental
-description: Correlates multiple events to detect the full Po1s0n1vy attack chain
-references:
-    - https://github.com/splunk/botsv1
-author: Tyler Casey
-date: 2024/01/28
-tags:
-    - attack.initial_access
-    - attack.execution
-    - attack.persistence
-    - attack.impact
-correlation:
-    type: temporal
-    rules:
-        - 4c5f5d3e-2b1a-4f9c-9e8d-7a6b5c4d3e2f  # Acunetix scan
-        - 7e9f8a6b-5c4d-3e2f-1a0b-9c8d7e6f5a4b  # Brute force
-        - 9a8b7c6d-5e4f-3a2b-1c0d-8e7f6a5b4c3d  # File upload
-        - 1b2c3d4e-5f6a-7b8c-9d0e-1f2a3b4c5d6e  # Webshell execution
-    timeframe: 24h
-    ordered: true
-level: critical
-```
-
-### Example Splunk Correlation Query
-```spl
-index=botsv1 dest_ip="192.168.250.70" OR dest="*imreallynotbatman*"
-| eval event_type=case(
-    sourcetype="stream:http" AND http_user_agent="*Acunetix*", "scan",
-    sourcetype="stream:http" AND uri_path="*/joomla/administrator*" AND http_method="POST", "brute_force",
-    sourcetype="stream:http" AND http_method="POST" AND http_content_type="*multipart*", "file_upload",
-    sourcetype="XmlWinEventLog:Microsoft-Windows-Sysmon/Operational" AND EventCode=1 AND Image="*inetpub*", "webshell"
-)
-| where isnotnull(event_type)
-| stats values(event_type) as attack_stages, count by dest_ip
-| where mvcount(attack_stages) >= 3
-```
-
-**What This Correlation Finds:**
-When you run this correlation, it confirms that the target system (192.168.250.70 / imreallynotbatman.com) experienced the full Po1s0n1vy attack progression, conclusively identifying a successful APT compromise requiring immediate incident response.
-
----
-
 ## Workshop Completion
 
 ### Congratulations!
@@ -831,5 +769,5 @@ You've successfully hunted through the Po1s0n1vy APT attack scenario using Sigma
 
 **Workshop Manual Version:** 3.0 (Student Edition)  
 **Last Updated:** January 28, 2026  
-**Author:** Prepared for Sigma Workshop  
+**Author:** Tyler Casey
 **License:** Creative Commons CC0 (aligned with BOTSV1 dataset license)

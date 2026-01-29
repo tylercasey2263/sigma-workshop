@@ -1,9 +1,21 @@
 title: VBScript Execution from Temporary Directory
 id: 7b8c9d0e-1f2a-3b4c-5d6e-7f8a9b0c1d2e
 status: experimental
-description: Detects execution of VBScript files from temporary directories
+description: |
+    Detects execution of VBScript files from temporary directories.
+    In BOTSV1, the malicious Word macro dropped and executed a VBScript
+    with a randomly generated name in the user's temp directory.
+
+    Attack Chain:
+    1. Word macro (Miranda_Tate_unveiled.dotm) executes
+    2. Drops VBScript to C:\Users\bob.smith.WAYNECORPINC\AppData\Local\Temp\[random].vbs
+    3. wscript.exe executes the VBScript
+    4. VBScript downloads 121214.tmp and mhtr.jpg from solidaritedeproximite.org
+
+    Execution Time: 16:43:12 UTC (document opened)
 references:
     - https://github.com/splunk/botsv1
+    - https://www.aldeid.com/wiki/TryHackMe-BP-Splunk/Ransomware
 author: Tyler Casey
 date: 2024/01/28
 tags:

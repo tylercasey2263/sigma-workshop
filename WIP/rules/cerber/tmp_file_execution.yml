@@ -1,14 +1,27 @@
 title: Suspicious TMP File Execution
 id: 2a3b4c5d-6e7f-8a9b-0c1d-2e3f4a5b6c7d
 status: experimental
-description: Detects execution of .tmp files which is unusual and seen with Cerber ransomware
+description: |
+    Detects execution of .tmp files which is unusual and characteristic of Cerber ransomware.
+    In BOTSV1, the file 121214.tmp was downloaded and executed by wscript.exe.
+
+    IOCs:
+    - File: 121214.tmp (NSIS installer containing Cerber payload)
+    - Parent Process ID: 3968
+    - Location: C:\Users\bob.smith.WAYNECORPINC\AppData\Local\Temp\121214.tmp
+    - Execution Time: 16:48:21 UTC
+
+    The .tmp extension is used to disguise the executable and evade detection.
 references:
     - https://github.com/splunk/botsv1
+    - https://www.aldeid.com/wiki/TryHackMe-BP-Splunk/Ransomware
 author: Tyler Casey
 date: 2024/01/28
 tags:
     - attack.execution
     - attack.t1204.002
+    - attack.defense_evasion
+    - attack.t1036.008
 logsource:
     category: process_creation
     product: windows
@@ -18,7 +31,9 @@ detection:
         ParentImage|endswith:
             - '\wscript.exe'
             - '\cscript.exe'
-    condition: selection
+    selection_known_file:
+        Image|contains: '121214.tmp'
+    condition: selection or selection_known_file
 falsepositives:
     - Rare legitimate temporary executables
-level: high
+level: critical

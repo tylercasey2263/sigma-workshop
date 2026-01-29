@@ -7,8 +7,8 @@ A hands-on workshop for learning threat hunting and Sigma rule development using
 1. Access the Splunk lab: https://splunk.samsclass.info/en-US/app/search/search
 2. Login with `student1` / `student1`
 3. Set time range to **August 09-11, 2016** and index to `botsv1`
-4. **Part 1:** Complete the [Sigma Rule Writing Practice](sigma_prac_app.md) exercises
-5. **Part 2:** Follow the [Workshop Manual](workshop_manual.md) for guided threat hunting
+4. **Part 1:** Complete the [Sigma Rule Writing Practice](labs/sigma_prac_app.md) exercises
+5. **Part 2:** Follow the [Workshop Manual](labs/workshop_manual.md) for guided threat hunting
 
 ## What You'll Learn
 
@@ -23,7 +23,7 @@ A hands-on workshop for learning threat hunting and Sigma rule development using
 
 ### Part 1: Sigma Rule Writing Practice
 
-Start here to build foundational skills. The [Sigma Rule Writing Practice](sigma_prac_app.md) provides **5 skeleton Sigma rules** where you complete the detection logic:
+Start here to build foundational skills. The [Sigma Rule Writing Practice](labs/sigma_prac_app.md) provides **5 skeleton Sigma rules** where you complete the detection logic:
 
 | Exercise | Detection Target | MITRE ATT&CK |
 |----------|------------------|--------------|
@@ -35,7 +35,7 @@ Start here to build foundational skills. The [Sigma Rule Writing Practice](sigma
 
 ### Part 2: Threat Hunting Walkthrough
 
-After completing the practice exercises, move to the [Workshop Manual](workshop_manual.md) which contains **22 Sigma detection rules** across two attack scenarios:
+After completing the practice exercises, move to the [Workshop Manual](labs/workshop_manual.md) which contains **22 Sigma detection rules** across two attack scenarios:
 
 | Scenario | Rules | Description |
 |----------|-------|-------------|
@@ -96,12 +96,13 @@ rules/
 ├── poisonivy/      # APT detection rules (8)
 ├── cerber/         # Ransomware detection rules (12)
 └── correlation/    # Attack chain rules (2)
+labs/
+├── sigma_prac_app.md   # Part 1: Sigma rule writing exercises
+└── workshop_manual.md  # Part 2: Guided threat hunting walkthrough
 scripts/
 └── sync_rules.py   # Syncs rules to workshop manual
 hooks/
 └── pre-commit      # Auto-syncs rules on commit
-sigma_prac_app.md   # Part 1: Sigma rule writing exercises
-workshop_manual.md  # Part 2: Guided threat hunting walkthrough
 ```
 
 ## Setup

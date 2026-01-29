@@ -118,7 +118,7 @@ Look for HTTP requests containing "Acunetix" in the User-Agent header. Legitimat
 
 ### Sigma Rule
 ```yaml
-title: Acunetix Web Vulnerability Scanner User-Agent testing123
+title: Acunetix Web Vulnerability Scanner User-Agent
 id: 4c5f5d3e-2b1a-4f9c-9e8d-7a6b5c4d3e2f
 status: experimental
 description: Detects the use of Acunetix web vulnerability scanner based on User-Agent string

@@ -1,7 +1,7 @@
-title: Executable File Upload via HTTP POST Multipart Form
+title: Executable File Upload via HTTP POST
 id: 9a8b7c6d-5e4f-3a2b-1c0d-8e7f6a5b4c3d
 status: experimental
-description: Detects upload of executable files via HTTP POST with multipart/form-data
+description: Detects upload of executable files via HTTP POST
 references:
     - https://github.com/splunk/botsv1
 author: Tyler Casey
@@ -17,7 +17,6 @@ logsource:
 detection:
     selection:
         http_method: 'POST'
-        http_content_type|contains: 'multipart/form-data'
     selection_uri:
         - uri_query|contains:
             - '.exe'

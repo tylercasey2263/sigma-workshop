@@ -6,7 +6,8 @@
       "Bash(git push)",
       "Bash(gh repo rename:*)",
       "Bash(git remote:*)",
-      "Bash(git restore:*)"
+      "Bash(git restore:*)",
+      "Bash(git mv:*)"
     ]
   }
 }

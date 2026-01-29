@@ -109,7 +109,7 @@ Attackers often begin their reconnaissance by scanning web applications for vuln
 - **Response Priority:** High - Provides early warning before exploitation occurs
 
 ### Detection Strategy
-Look for HTTP requests containing "Acunetix" in the User-Agent header. Legitimate traffic will never contain this string, making it a high-fidelity indicator.
+Look for HTTP requests containing "Acunetix" in the User-Agent header. Legitimate user traffic will never contain this string, making it a high-fidelity indicator.
 
 ### Splunk Query Optimization
 - **Index:** `index=botsv1`
@@ -227,7 +227,7 @@ This query reveals **hundreds of login attempts** from IP address **23.22.63.114
 - **Attacker IP:** 23.22.63.114 (different from scanner IP - likely the C2/exploitation server)
 - **Target:** /joomla/administrator/index.php
 - **Method:** POST requests with varying passwords
-- **Volume:** 500+ attempts observed
+- **Volume:** 400+ attempts observed
 - **Attack Stage:** Credential Access / Brute Force
 
 **Attack Chain Context:**
@@ -255,10 +255,10 @@ Monitor HTTP POST requests with `multipart/form-data` content type (used for fil
 
 ### Sigma Rule
 ```yaml
-title: Executable File Upload via HTTP POST Multipart Form
+title: Executable File Upload via HTTP POST
 id: 9a8b7c6d-5e4f-3a2b-1c0d-8e7f6a5b4c3d
 status: experimental
-description: Detects upload of executable files via HTTP POST with multipart/form-data
+description: Detects upload of executable files via HTTP POST
 references:
     - https://github.com/splunk/botsv1
 author: Tyler Casey
@@ -274,7 +274,6 @@ logsource:
 detection:
     selection:
         http_method: 'POST'
-        http_content_type|contains: 'multipart/form-data'
     selection_uri:
         - uri_query|contains:
             - '.exe'
@@ -307,8 +306,9 @@ level: high
 ### Example Splunk Query
 ```spl
 index=botsv1 sourcetype=stream:http
-http_method="POST" http_content_type="*multipart/form-data*" uri_query IN ("*.exe*", "*.dll*", "*.bat*", "*.cmd*", "*.ps1*", "*.vbs*") OR form_data IN ("*.exe*", "*.dll*", "*.bat*", "*.cmd*", "*.ps1*", "*.vbs*") OR dest_content IN ("*.exe*", "*.dll*", "*.bat*", "*.cmd*", "*.ps1*", "*.vbs*")
-| table _time src_ip dest_ip uri_path form_data dest_content
+http_method="POST" uri_query IN ("*.exe*", "*.dll*", "*.bat*", "*.cmd*", "*.ps1*", "*.vbs*") OR form_data IN ("*.exe*", "*.dll*", "*.bat*", "*.cmd*", "*.ps1*", "*.vbs*") OR dest_content IN ("*.exe*", "*.dll*", "*.bat*", "*.cmd*", "*.ps1*", "*.vbs*")
+| rex field=dest_content "(?<filename>\w+\.(exe|dll|bat|cmd|ps1|vbs))"
+| table _time src_ip dest_ip uri_path form_data dest_content filename
 | sort _time
 ```
 
@@ -345,7 +345,7 @@ Look for process creation events (Sysmon EventCode=1) where executables are runn
 - **Index:** `index=botsv1`
 - **Sourcetype:** `sourcetype=XmlWinEventLog:Microsoft-Windows-Sysmon/Operational`
 - **EventCode:** `EventCode=1` (Process Creation)
-- **Key Fields:** `Image`, `CommandLine`, `ParentImage`, `ComputerName`
+- **Key Fields:** `Image`, `CommandLine`, `ParentImage`, `host`
 
 ### Sigma Rule
 ```yaml
@@ -399,7 +399,7 @@ level: critical
 ```spl
 index=botsv1 sourcetype="XmlWinEventLog:Microsoft-Windows-Sysmon/Operational" EventCode=1
 (Image IN ("*\\inetpub\\wwwroot\\*", "*\\xampp\\htdocs\\*", "*\\wamp\\www\\*") Image="*.exe") OR (ParentImage IN ("*\\inetpub\\wwwroot\\*", "*\\xampp\\htdocs\\*", "*\\wamp\\www\\*") ParentImage="*.exe") CommandLine IN ("*whoami*", "*net user*", "*net localgroup*", "*ipconfig*", "*systeminfo*", "*cmd.exe*", "*powershell*")
-| table _time ComputerName User Image CommandLine ParentImage
+| table _time host User ParentImage Image CommandLine 
 | sort _time
 ```
 
@@ -417,10 +417,10 @@ The uploaded webshell (from step 3) is now **actively being used** by the attack
 
 ---
 
-## Detection 5: Website Defacement File Upload
+## Detection 5: Website Defacement File Download
 
 ### What Are We Looking For?
-Attackers sometimes deface websites to send a message, damage reputation, or demonstrate their access. This typically involves uploading image files (often with threatening or political messages) to the web directory and modifying the site to display them.
+Attackers sometimes deface websites to send a message, damage reputation, or demonstrate their access. This typically involves uploading/downloading image files (often with threatening or political messages) to the web directory and modifying the site to display them.
 
 ### Why This Matters
 - **Attack Stage:** Impact (MITRE ATT&CK T1491.001 - Defacement: Internal Defacement)
@@ -428,19 +428,19 @@ Attackers sometimes deface websites to send a message, damage reputation, or dem
 - **Response Priority:** High - Public-facing damage
 
 ### Detection Strategy
-Look for suspicious image file uploads via POST requests to web application directories, especially following other compromise indicators like brute force or webshell activity.
+Look for suspicious image file downloads via GET requests to web application directories, especially following other compromise indicators like brute force or webshell activity.
 
 ### Splunk Query Optimization
 - **Index:** `index=botsv1`
 - **Sourcetype:** `sourcetype=stream:http`
-- **Key Fields:** `http_method`, `uri_path`, `uri_query`, `form_data`, `src_ip`
+- **Key Fields:** `http_method`, `uri_path`, `uri_query`, `form_data`, `src_ip`, `site`
 
 ### Sigma Rule
 ```yaml
-title: Suspicious Image File Upload to Web Directory
+title: Suspicious Image File Download to Web Directory
 id: 2c3d4e5f-6a7b-8c9d-0e1f-2a3b4c5d6e7f
 status: experimental
-description: Detects upload of image files that may be used for website defacement
+description: Detects download of image files that may be used for website defacement
 references:
     - https://github.com/splunk/botsv1
 author: Tyler Casey
@@ -476,12 +476,12 @@ level: medium
 ```spl
 index=botsv1 sourcetype=stream:http
 http_method="GET" uri_path IN ("*.jpg*", "*.jpeg*", "*.png*", "*.gif*") OR form_data IN ("*.jpg*", "*.jpeg*", "*.png*", "*.gif*")
-| table _time src_ip dest_ip uri_path
+| table _time site src_ip dest_ip uri_path form_data
 | sort _time
 ```
 
 ### What This Detection Finds
-The query reveals the upload of a defacement image: **poisonivy-is-coming-for-you-batman.jpeg**. This image was uploaded to replace the website's homepage, announcing the compromise.
+The query reveals the upload of a defacement image: **poisonivy-is-coming-for-you-batman.jpeg**. This image was downloaded to replace the website's homepage, announcing the compromise.
 
 **Key Findings:**
 - **Attacker IP:** 23.22.63.114
@@ -708,7 +708,7 @@ http_method="POST" form_data IN ("*username=*", "*passwd=*", "*password=*") NOT 
 This detection provides an alternative view of the brute force attack detected in Detection 2, confirming the high volume of failed authentication attempts before the successful compromise.
 
 **Key Findings:**
-- **Attacker IP:** 23.22.63.114
+- **Attacker IP:** 23.22.63.114 & 40.80.148.42
 - **Failed Attempts:** Hundreds of 401/403 responses
 - **Target:** Multiple login interfaces
 - **Attack Stage:** Credential Access

@@ -9,9 +9,9 @@ import os
 # Get repo root
 repo_root = subprocess.check_output(['git', 'rev-parse', '--show-toplevel'], text=True).strip()
 sync_script = os.path.join(repo_root, 'scripts', 'sync_rules.py')
-manual_path = os.path.join(repo_root, 'workshop_manual.md')
+manual_path = os.path.join(repo_root, 'labs', 'workshop_manual.md')
 
-print("Syncing Sigma rules to workshop_manual.md...")
+print("Syncing Sigma rules to labs/workshop_manual.md...")
 
 # Run sync script
 result = subprocess.run([sys.executable, sync_script], cwd=repo_root)
@@ -23,9 +23,9 @@ if result.returncode != 0:
 # Stage manual if changed
 diff_result = subprocess.run(['git', 'diff', '--quiet', manual_path], cwd=repo_root)
 if diff_result.returncode != 0:
-    print("Staging updated workshop_manual.md...")
+    print("Staging updated labs/workshop_manual.md...")
     subprocess.run(['git', 'add', manual_path], cwd=repo_root)
 else:
-    print("No changes to workshop_manual.md")
+    print("No changes to labs/workshop_manual.md")
 
 print("Pre-commit sync complete!")

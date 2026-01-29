@@ -17,7 +17,7 @@ By the end of this workshop, you will be able to:
 ## Lab Environment
 
 ### Splunk Instance Access
-- **URL:** https://splunk.samsclass.info/en-US/app/search/search
+- **URL:** https://splunk.samsclass.info/en-US/app/search/search or https://bots.splunk.com (you will need to make a Splunk account to utilize this site)
 - **Username:** `student1`
 - **Password:** `student1`
 - **Index:** `botsv1`

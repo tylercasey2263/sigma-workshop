@@ -1,4 +1,4 @@
-# Sigma Threat Hunting Workshop Manual
+# Sigma Workshop Manual
 
 ## Workshop Overview
 

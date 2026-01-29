@@ -146,7 +146,7 @@ level: high
 ### Example Splunk Query
 ```spl
 index=botsv1 sourcetype=stream:http 
-http_user_agent IN ("*Acunetix*", "*acunetix*")
+http_user_agent IN ("*Acunetix*")
 | table _time src_ip dest_ip uri_path http_user_agent
 | sort _time
 ```

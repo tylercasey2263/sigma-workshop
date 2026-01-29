@@ -1,9 +1,21 @@
 title: USB Device Insertion Followed by Suspicious Activity
 id: 3b4c5d6e-7f8a-9b0c-1d2e-3f4a5b6c7d8e
 status: experimental
-description: Detects USB device insertion followed by suspicious process execution
+description: |
+    Detects USB device insertion followed by suspicious process execution.
+    In the BOTSV1 scenario, Bob Smith found a USB drive labeled "MIRANDA_PRI"
+    in the parking lot and plugged it into his workstation (we8105desk).
+
+    Attack Chain:
+    1. USB device "MIRANDA_PRI" inserted
+    2. User opens Miranda_Tate_unveiled.dotm from D:\ drive
+    3. Malicious macro executes, spawning wscript.exe
+
+    Social Engineering: The USB and document names reference "Miranda Tate"
+    (a character from The Dark Knight Rises - Wayne Enterprises theme)
 references:
     - https://github.com/splunk/botsv1
+    - https://www.aldeid.com/wiki/TryHackMe-BP-Splunk/Ransomware
 author: Tyler Casey
 date: 2024/01/28
 tags:
@@ -18,6 +30,7 @@ detection:
         Service_Name|contains:
             - 'USB'
             - 'USBSTOR'
+            - 'MIRANDA_PRI'
     suspicious_process:
         EventCode: 1
         Image|endswith: '\WINWORD.EXE'

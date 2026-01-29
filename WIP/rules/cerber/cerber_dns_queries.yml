@@ -1,9 +1,22 @@
 title: Cerber Ransomware DNS Query Pattern
 id: 0e1f2a3b-4c5d-6e7f-8a9b-0c1d2e3f4a5b
 status: experimental
-description: Detects DNS queries to domains associated with Cerber ransomware C2
+description: |
+    Detects DNS queries to Cerber ransomware C2 and payment portal domains.
+    Cerber uses a Domain Generation Algorithm (DGA) producing domains like:
+    cerberhhyed5frqa.xmfir0.win (payment/decryption portal)
+
+    Timeline from BOTSV1:
+    - 16:48:12 UTC: First suspicious domain query (solidaritedeproximite.org)
+    - 17:15:12 UTC: Cerber C2 domain query (cerberhhyed5frqa.xmfir0.win)
+
+    Suricata Signatures:
+    - 2816763: ETPRO TROJAN Ransomware/Cerber Checkin 2
+    - 2816764: ETPRO TROJAN Ransomware/Cerber Checkin Error ICMP Response
+    - 2820156: ETPRO TROJAN Ransomware/Cerber Onion Domain Lookup
 references:
     - https://github.com/splunk/botsv1
+    - https://www.aldeid.com/wiki/TryHackMe-BP-Splunk/Ransomware
 author: Tyler Casey
 date: 2024/01/28
 tags:
@@ -12,13 +25,18 @@ tags:
 logsource:
     category: dns
 detection:
-    selection:
-        query|contains:
-            - 'cerber'
+    selection_cerber:
+        query|contains: 'cerber'
+    selection_tld:
         query|endswith:
             - '.win'
             - '.top'
-    condition: selection
+            - '.xmfir0.win'
+    selection_known_domains:
+        query|contains:
+            - 'solidaritedeproximite.org'
+            - 'cerberhhyed5frqa'
+    condition: (selection_cerber and selection_tld) or selection_known_domains
 falsepositives:
-    - Unlikely
+    - Unlikely - these patterns are specific to Cerber ransomware
 level: critical

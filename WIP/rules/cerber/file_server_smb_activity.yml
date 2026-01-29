@@ -1,9 +1,26 @@
 title: Mass File Modification on File Server via SMB
 id: 6e7f8a9b-0c1d-2e3f-4a5b-6c7d8e9f0a1b
 status: experimental
-description: Detects mass file modifications on file servers which may indicate ransomware spread
+description: |
+    Detects mass file modifications on file servers which may indicate ransomware spread.
+    In BOTSV1, Cerber ransomware spread from the infected workstation (we8105desk)
+    to the file server (we9041srv) via SMB.
+
+    Environment:
+    - Patient Zero: we8105desk (192.168.250.100)
+    - File Server: we9041srv.waynecorpinc.local (192.168.250.20)
+    - User: bob.smith.WAYNECORPINC
+
+    Impact:
+    - 406 .txt files encrypted in Bob Smith's profile
+    - 257 distinct PDFs encrypted on remote file server
+
+    Access_Mask values:
+    - 0x2: WriteData/AddFile
+    - 0x4: AppendData/AddSubdirectory
 references:
     - https://github.com/splunk/botsv1
+    - https://www.aldeid.com/wiki/TryHackMe-BP-Splunk/Ransomware
 author: Tyler Casey
 date: 2024/01/28
 tags:
@@ -23,6 +40,9 @@ detection:
         Access_Mask:
             - '0x2'
             - '0x4'
+    selection_known_servers:
+        dest_ip: '192.168.250.20'
+        host|contains: 'we9041srv'
     condition: selection
 falsepositives:
     - Legitimate file operations

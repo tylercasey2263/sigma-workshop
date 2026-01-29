@@ -1,9 +1,18 @@
 title: Suspicious Outbound ICMP Traffic Pattern
 id: 5d6e7f8a-9b0c-1d2e-3f4a-5b6c7d8e9f0a
 status: experimental
-description: Detects suspicious ICMP traffic patterns associated with Cerber ransomware beaconing
+description: |
+    Detects suspicious ICMP traffic patterns associated with Cerber ransomware.
+    Cerber uses ICMP as an alternative C2 channel and for connectivity testing.
+
+    Suricata Signature:
+    - 2816764: ETPRO TROJAN Ransomware/Cerber Checkin Error ICMP Response (2 alerts in BOTSV1)
+
+    In BOTSV1, elevated ICMP traffic was observed from the infected workstation
+    (192.168.250.100) during and after the infection.
 references:
     - https://github.com/splunk/botsv1
+    - https://www.aldeid.com/wiki/TryHackMe-BP-Splunk/Ransomware
 author: Tyler Casey
 date: 2024/01/28
 tags:
@@ -15,6 +24,8 @@ detection:
     selection:
         protocol: 'ICMP'
         direction: 'outbound'
+    selection_known_victim:
+        srcip: '192.168.250.100'
     condition: selection
 falsepositives:
     - Network diagnostic tools

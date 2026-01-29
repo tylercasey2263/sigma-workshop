@@ -1,9 +1,18 @@
 title: Suspicious Office Document with Macro Extension Opened
 id: 4c5d6e7f-8a9b-0c1d-2e3f-4a5b6c7d8e9f
 status: experimental
-description: Detects opening of Office documents with macro-enabled extensions
+description: |
+    Detects opening of Office documents with macro-enabled extensions.
+    In BOTSV1, the malicious document was "Miranda_Tate_unveiled.dotm" opened from
+    a USB drive (D:\) by Bob Smith on workstation we8105desk.
+
+    Document Hash (MD5): 624851a23067e014237e8d9869713fd1
+
+    The .dotm extension (Word macro-enabled template) is used to appear less
+    suspicious than .docm while still containing executable VBA macro code.
 references:
     - https://github.com/splunk/botsv1
+    - https://www.aldeid.com/wiki/TryHackMe-BP-Splunk/Ransomware
 author: Tyler Casey
 date: 2024/01/28
 tags:
@@ -20,7 +29,11 @@ detection:
             - '.docm'
             - '.xlsm'
             - '.pptm'
-    condition: selection
+    selection_known_malicious:
+        CommandLine|contains:
+            - 'Miranda_Tate'
+            - 'miranda_tate'
+    condition: selection or selection_known_malicious
 falsepositives:
     - Legitimate macro-enabled documents in business environments
 level: medium

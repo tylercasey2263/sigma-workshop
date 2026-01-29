@@ -1,9 +1,23 @@
 title: Cerber Ransomware VBScript Characteristics
 id: 8c9d0e1f-2a3b-4c5d-6e7f-8a9b0c1d2e3f
 status: experimental
-description: Detects VBScript with characteristics of Cerber ransomware dropper
+description: |
+    Detects VBScript with characteristics specific to Cerber ransomware dropper.
+    This is a high-fidelity detection combining:
+    - Word as parent process
+    - VBScript execution from AppData directory
+
+    This pattern is highly indicative of macro-based malware delivery,
+    specifically Cerber ransomware in the BOTSV1 scenario.
+
+    The VBScript dropper:
+    1. Is created in AppData\Local\Temp with random filename
+    2. Downloads mhtr.jpg (steganography payload) from C2
+    3. Downloads 121214.tmp (NSIS installer) from C2
+    4. Executes 121214.tmp to start encryption
 references:
     - https://github.com/splunk/botsv1
+    - https://www.aldeid.com/wiki/TryHackMe-BP-Splunk/Ransomware
 author: Tyler Casey
 date: 2024/01/28
 tags:

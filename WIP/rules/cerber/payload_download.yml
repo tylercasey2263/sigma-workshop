@@ -1,29 +1,45 @@
-title: Suspicious File Download from Compromised or Malicious Domain
+title: Cerber Ransomware Payload Download
 id: 9d0e1f2a-3b4c-5d6e-7f8a-9b0c1d2e3f4a
 status: experimental
-description: Detects download of suspicious files that may be ransomware payloads
+description: |
+    Detects download of Cerber ransomware payload files from known malicious infrastructure.
+    The VBScript dropper downloads mhtr.jpg (steganography-hidden payload) and 121214.tmp
+    from solidaritedeproximite.org or backup IP 92.222.104.182.
+
+    IOCs:
+    - mhtr.jpg (MD5: ee0828a4e4c195d97313bfc7d4b531f1) - Cerber cryptor using steganography
+    - 121214.tmp - NSIS installer containing Cerber payload
+    - Domain: solidaritedeproximite.org
+    - Backup IP: 92.222.104.182
 references:
     - https://github.com/splunk/botsv1
+    - https://www.aldeid.com/wiki/TryHackMe-BP-Splunk/Ransomware
 author: Tyler Casey
 date: 2024/01/28
 tags:
     - attack.command_and_control
     - attack.t1105
+    - attack.defense_evasion
+    - attack.t1027.003
 logsource:
     category: proxy
     product: web
 detection:
     selection:
         http_method: 'GET'
-        uri_query|endswith:
+        status: 200
+    selection_file:
+        uri_path|endswith:
+            - 'mhtr.jpg'
+            - '121214.tmp'
+        uri_path|contains:
             - '.tmp'
             - '.jpg'
-            - '.jpeg'
-        status: 200
-    suspicious_domain:
+    selection_domain:
         dest|contains:
             - 'solidaritedeproximite.org'
-    condition: selection and suspicious_domain
+            - '92.222.104.182'
+    condition: selection and (selection_file or selection_domain)
 falsepositives:
-    - Legitimate file downloads
-level: high
+    - Legitimate file downloads from these specific domains (unlikely)
+level: critical

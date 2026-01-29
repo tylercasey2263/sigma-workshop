@@ -1,9 +1,21 @@
 title: Suspicious Mass File Modification Activity
 id: 1f2a3b4c-5d6e-7f8a-9b0c-1d2e3f4a5b6c
 status: experimental
-description: Detects mass file modification activity consistent with ransomware encryption
+description: |
+    Detects mass file modification activity consistent with ransomware encryption.
+    Sysmon EventCode=2 tracks file creation time changes, which ransomware
+    modifies after encrypting files.
+
+    BOTSV1 Impact:
+    - Victim: we8105desk (192.168.250.100) - Bob Smith's workstation
+    - 406 .txt files encrypted in Bob Smith's profile
+    - 257 distinct PDFs encrypted on file server (we9041srv)
+    - Encryption completed within minutes of initial execution
+
+    Cerber encrypts files and appends random extensions or .cerber extension.
 references:
     - https://github.com/splunk/botsv1
+    - https://www.aldeid.com/wiki/TryHackMe-BP-Splunk/Ransomware
 author: Tyler Casey
 date: 2024/01/28
 tags:
@@ -23,6 +35,7 @@ detection:
             - '.docx'
             - '.xls'
             - '.xlsx'
+            - '.cerber'
     condition: selection
 falsepositives:
     - Legitimate bulk file operations

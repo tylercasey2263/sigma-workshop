@@ -409,9 +409,9 @@ detection:
 
 Once you've completed the exercises above, try these additional challenges:
 
-1. **Enhance Exercise 1:** Modify the whoami detection to be higher severity when run from unusual parent processes (like cmd.exe spawned from Word or Excel)
+1. **Enhance Exercise** Modify the whoami detection to be higher severity when run from unusual parent processes (like cmd.exe spawned from Word or Excel)
 
-2. **Enhance Exercise 3:** Add a filter to reduce false positives from known legitimate encoded PowerShell scripts (e.g., from SCCM or Intune)
+2. **Enhance Exercise** Add a filter to reduce false positives from known legitimate encoded PowerShell scripts (e.g., from SCCM or Intune)
 
 3. **Create Your Own:** Write a Sigma rule to detect the use of `ipconfig /all` for network discovery (T1016)
 

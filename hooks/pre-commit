@@ -1,38 +1,31 @@
-#!/bin/bash
-#
-# Pre-commit hook to sync Sigma rules to workshop_manual.md
-#
-# This hook runs automatically before each commit to ensure the
-# workshop manual stays in sync with the individual rule files.
+#!/usr/bin/env python3
+"""
+Pre-commit hook to sync Sigma rules to workshop_manual.md
+"""
+import subprocess
+import sys
+import os
 
-echo "Syncing Sigma rules to workshop_manual.md..."
+# Get repo root
+repo_root = subprocess.check_output(['git', 'rev-parse', '--show-toplevel'], text=True).strip()
+sync_script = os.path.join(repo_root, 'scripts', 'sync_rules.py')
+manual_path = os.path.join(repo_root, 'workshop_manual.md')
 
-# Get the repo root directory
-REPO_ROOT="$(git rev-parse --show-toplevel)"
+print("Syncing Sigma rules to workshop_manual.md...")
 
-# Run the sync script (try py launcher first for Windows compatibility)
-if command -v py &> /dev/null; then
-    py "$REPO_ROOT/scripts/sync_rules.py"
-elif command -v python3 &> /dev/null; then
-    python3 "$REPO_ROOT/scripts/sync_rules.py"
-elif command -v python &> /dev/null; then
-    python "$REPO_ROOT/scripts/sync_rules.py"
-else
-    echo "Error: Python not found. Please ensure Python is installed and in PATH."
-    exit 1
-fi
+# Run sync script
+result = subprocess.run([sys.executable, sync_script], cwd=repo_root)
 
-if [ $? -ne 0 ]; then
-    echo "Error: Rule sync failed. Please check the output above."
-    exit 1
-fi
+if result.returncode != 0:
+    print("Error: Rule sync failed.")
+    sys.exit(1)
 
-# Stage the updated manual if it changed
-if git diff --quiet "$REPO_ROOT/workshop_manual.md" 2>/dev/null; then
-    echo "No changes to workshop_manual.md"
-else
-    echo "Staging updated workshop_manual.md..."
-    git add "$REPO_ROOT/workshop_manual.md"
-fi
+# Stage manual if changed
+diff_result = subprocess.run(['git', 'diff', '--quiet', manual_path], cwd=repo_root)
+if diff_result.returncode != 0:
+    print("Staging updated workshop_manual.md...")
+    subprocess.run(['git', 'add', manual_path], cwd=repo_root)
+else:
+    print("No changes to workshop_manual.md")
 
-echo "Pre-commit sync complete!"
+print("Pre-commit sync complete!")

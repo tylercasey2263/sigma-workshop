@@ -6,7 +6,7 @@ A hands-on workshop for learning threat hunting and Sigma rule development using
 
 1. Access the Splunk lab: https://splunk.samsclass.info/en-US/app/search/search
 2. Login with `student1` / `student1`
-3. Set time range to **August 10-24, 2016** and index to `botsv1`
+3. Set time range to **August 09-11, 2016** and index to `botsv1`
 4. **Part 1:** Complete the [Sigma Rule Writing Practice](sigma_prac_app.md) exercises
 5. **Part 2:** Follow the [Workshop Manual](workshop_manual.md) for guided threat hunting
 

@@ -8,7 +8,11 @@
       "Bash(git remote:*)",
       "Bash(git restore:*)",
       "Bash(git mv:*)",
-      "Bash(gh api:*)"
+      "Bash(gh api:*)",
+      "Bash(gh repo view:*)",
+      "Bash(gh repo delete:*)",
+      "Bash(gh repo create:*)",
+      "Bash(git push:*)"
     ]
   }
 }
